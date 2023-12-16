@@ -7,15 +7,20 @@ from scipy.integrate import solve_ivp
 r"""
 # Logistická rovnice s lovem
 
-Rovnice je logistická rovnice obohacená o konstantní lov.
+Rovnice je logistická rovnice obohacená o konstantní lov. Používá se k modelování ekologicky udržitelného 
+lovu v populaci žijící v prostředí s omezenou nosnou kapacitou.
 
 $$ \displaystyle \frac{\mathrm dx}{\mathrm dt}=rx\left(1-\frac xK\right)-h$$
 
 """
 
-K = st.slider("K", 0.1, 10.0, 1.0)
-r = st.slider("r", .1, 10.0, 1.0)
-h = st.slider("h", 0.0, 1.0, .1)
+col1, col2 = st.columns(2)
+
+with col1:
+    K = st.slider("K", 0.1, 10.0, 1.0)
+    r = st.slider("r", .1, 10.0, 1.0)
+    h = st.slider("h", 0.0, 1.0, .1)
+
 meze = [0,10]
 n = 1000
 t = np.linspace(*meze,n)
@@ -35,4 +40,6 @@ for i,pp in enumerate(np.linspace(0.05,K*1.4,N)):
 fig, ax = plt.subplots()    
 ax.plot(t,reseni, color='gray')
 ax.set(ylim=(0,reseni.max()))
-st.pyplot(fig)
+
+with col2:
+    st.pyplot(fig)
