@@ -4,6 +4,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 
+st.set_page_config(layout="wide")
+
 r"""
 # Logistická rovnice s lovem
 
