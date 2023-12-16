@@ -7,6 +7,8 @@ from scipy.integrate import solve_ivp
 r"""
 # Logistická rovnice s lovem
 
+Rovnice je logistická rovnice obohacená o konstantní lov.
+
 $$ \displaystyle \frac{\mathrm dx}{\mathrm dt}=rx\left(1-\frac xK\right)-h$$
 
 """
