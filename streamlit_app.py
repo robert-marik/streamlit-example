@@ -1,7 +1,8 @@
-import altair as alt
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
+import plotly.io as pio
+import plotly.graph_objects as go
 from scipy.integrate import solve_ivp
 
 st.set_page_config(layout="wide")
@@ -23,7 +24,7 @@ col1, col2 = st.columns(2)
 with col1:
     K = st.slider(r"$K$ (nosná kapacita prostředí)", 0.1, 10.0, 1.0)
     r = st.slider(r"$r$ (rychlost růstu)", .1, 10.0, 1.0)
-    h = st.slider(r"$h$ (itenzita lovu)", 0.0, 1.0, .1)
+    h = st.slider(r"$h$ (intenzita lovu)", 0.0, 1.0, .1)
 
 meze = [0,10]
 n = 1000
@@ -49,7 +50,7 @@ for i,pp in enumerate(np.linspace(0.05,K*1.4,N)):
 
 # %%
 
-fig, ax = plt.subplots()    
+fig = go.Figure()
 
 for res in reseni.T:
     # if np.isnan(res).any():
@@ -57,23 +58,27 @@ for res in reseni.T:
         color='red'
     else:
         color='gray'
-    ax.plot(t,res,color=color)
-
-ax.set(ylim=(0,np.nanmax(reseni)))
-
+    fig.add_trace(go.Scatter(x=t, y=res, mode='lines', line=dict(color=color)))
+fig.update_xaxes(title_text="Čas")
+fig.update_yaxes(title_text="Velikost populace")
+fig.update_layout(showlegend=False)
 
 # %%
-fig2,ax2 = plt.subplots()
+# fig2,ax2 = plt.subplots()
 x = np.linspace(0,1.3*K,500)
-ax2.plot(x,r*x*(1-x/K), color='blue')
-ax2.plot(x,h+x*0, color='red')
-ax2.set(ylim=(0,None))
-
+# ax2.plot(x,r*x*(1-x/K), color='blue')
+# ax2.plot(x,h+x*0, color='red')
+# ax2.set(ylim=(0,None))
+fig2 = go.Figure()
+fig2.add_trace(go.Scatter(x=x, y=r*x*(1-x/K), mode='lines', line=dict(color='blue')))
+fig2.add_trace(go.Scatter(x=x, y=x*0+h, mode='lines', line=dict(color='red')))
+fig2.update_layout(showlegend=False)
+fig2.update_yaxes(range = [0,None])
 
 
 with col2:
     tab1,tab2 = st.tabs(["Časový vývoj","Graf pravé strany"])
     with tab1:
-        st.pyplot(fig)
+        st.plotly_chart(fig)
     with tab2:
-        st.pyplot(fig2)
+        st.plotly_chart(fig2)
